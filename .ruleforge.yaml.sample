@@ -1,0 +1,32 @@
+# RuleForge 設定ファイル
+
+# ベースリポジトリのURL (必須)
+# 例: https://github.com/yourorg/cursor-rules-base
+base-repo: ""
+
+# 対象ファイルのリスト (オプション、デフォルトは .cursor/rules.md)
+target-files:
+  - .cursor/rules.md
+  - .cursor/config.json
+
+# GitHub APIトークン (オプション、環境変数から読み込むことも可能)
+# 環境変数を使う場合は ${環境変数名} の形式で指定
+github-token: ${GITHUB_TOKEN}
+
+# コミットメッセージやPRのタイトル (アップロード時に必須)
+# コマンドラインオプション --message でも指定可能
+message: "Update Cursor Rules"
+
+# 詳細ログ出力 (オプション)
+verbose: false
+
+# ローカルディレクトリパス (オプション、デフォルトはカレントディレクトリ)
+local-dir: "."
+
+# 作業用ブランチ名 (オプション)
+# 指定しない場合は「update-agent-rules-{PID}」形式で自動生成
+branch-name: "update-agent-rules"
+
+# カレントリポジトリ名 (オプション、自動検出を上書き)
+# 指定しない場合は .git/config から自動検出
+repo-name: ""
