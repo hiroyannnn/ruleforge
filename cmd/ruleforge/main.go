@@ -68,7 +68,9 @@ func main() {
 		},
 	}
 	uploadCmd.Flags().StringVarP(&message, "message", "m", "", "PRのメッセージ")
-	uploadCmd.MarkFlagRequired("message")
+	if err := uploadCmd.MarkFlagRequired("message"); err != nil {
+		log.Fatalf("Error marking flag as required: %v", err)
+	}
 
 	// コマンド追加
 	rootCmd.AddCommand(downloadCmd)

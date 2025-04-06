@@ -19,7 +19,7 @@ func TestExecute(t *testing.T) {
 			// GitHub APIは内容をBase64でエンコードして返します
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{
+			_, err := w.Write([]byte(`{
 				"name": "rules.md",
 				"path": ".cursor/rules.md",
 				"sha": "abc123",
@@ -32,6 +32,10 @@ func TestExecute(t *testing.T) {
 				"content": "VGVzdCBydWxlcyBjb250ZW50Cg==",
 				"encoding": "base64"
 			}`))
+			if err != nil {
+				http.Error(w, "モックレスポンスの書き込みに失敗", http.StatusInternalServerError)
+				return
+			}
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}

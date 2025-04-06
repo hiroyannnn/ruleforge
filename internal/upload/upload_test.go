@@ -38,56 +38,76 @@ func TestExecute(t *testing.T) {
 		// レポジトリ情報取得
 		if r.Method == "GET" && r.URL.Path == "/repos/testowner/testrepo" {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{
+			_, err := w.Write([]byte(`{
 				"default_branch": "main"
 			}`))
+			if err != nil {
+				http.Error(w, "レスポンスの書き込みに失敗", http.StatusInternalServerError)
+				return
+			}
 			return
 		}
 
 		// リファレンス取得
 		if r.Method == "GET" && r.URL.Path == "/repos/testowner/testrepo/git/refs/heads/main" {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{
+			_, err := w.Write([]byte(`{
 				"ref": "refs/heads/main",
 				"object": {
 					"sha": "abcdef123456"
 				}
 			}`))
+			if err != nil {
+				http.Error(w, "レスポンスの書き込みに失敗", http.StatusInternalServerError)
+				return
+			}
 			return
 		}
 
 		// ブランチ作成
 		if r.Method == "POST" && r.URL.Path == "/repos/testowner/testrepo/git/refs" {
 			w.WriteHeader(http.StatusCreated)
-			w.Write([]byte(`{
+			_, err := w.Write([]byte(`{
 				"ref": "refs/heads/test-branch",
 				"object": {
 					"sha": "abcdef123456"
 				}
 			}`))
+			if err != nil {
+				http.Error(w, "レスポンスの書き込みに失敗", http.StatusInternalServerError)
+				return
+			}
 			return
 		}
 
 		// ファイル作成
 		if r.Method == "PUT" && r.URL.Path == "/repos/testowner/testrepo/contents/.cursor/rules.md" {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{
+			_, err := w.Write([]byte(`{
 				"content": {
 					"name": "rules.md",
 					"path": ".cursor/rules.md",
 					"sha": "newsha123"
 				}
 			}`))
+			if err != nil {
+				http.Error(w, "レスポンスの書き込みに失敗", http.StatusInternalServerError)
+				return
+			}
 			return
 		}
 
 		// PR作成
 		if r.Method == "POST" && r.URL.Path == "/repos/testowner/testrepo/pulls" {
 			w.WriteHeader(http.StatusCreated)
-			w.Write([]byte(`{
+			_, err := w.Write([]byte(`{
 				"number": 123,
 				"html_url": "https://github.com/testowner/testrepo/pull/123"
 			}`))
+			if err != nil {
+				http.Error(w, "レスポンスの書き込みに失敗", http.StatusInternalServerError)
+				return
+			}
 			return
 		}
 
