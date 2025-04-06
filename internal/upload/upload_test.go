@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/yourusername/ruleforge/internal/config"
+	"github.com/hiroyannnn/ruleforge/internal/config"
 )
 
 func TestExecute(t *testing.T) {

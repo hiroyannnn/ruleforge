@@ -5,10 +5,10 @@ import (
 	"log"
 	"os"
 
+	"github.com/hiroyannnn/ruleforge/internal/config"
+	"github.com/hiroyannnn/ruleforge/internal/download"
+	"github.com/hiroyannnn/ruleforge/internal/upload"
 	"github.com/spf13/cobra"
-	"github.com/yourusername/ruleforge/internal/config"
-	"github.com/yourusername/ruleforge/internal/download"
-	"github.com/yourusername/ruleforge/internal/upload"
 )
 
 var (

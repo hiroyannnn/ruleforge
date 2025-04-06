@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/google/go-github/v60/github"
-	"github.com/yourusername/ruleforge/internal/config"
+	"github.com/hiroyannnn/ruleforge/internal/config"
 	"golang.org/x/oauth2"
 )
 
