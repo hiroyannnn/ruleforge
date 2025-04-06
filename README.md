@@ -13,7 +13,7 @@ This tool provides the following functions:
 ## Installation
 
 ```bash
-go install github.com/hiroyannnn/ruleforge@latest
+go install github.com/hiroyannnn/ruleforge/cmd/ruleforge@latest
 ```
 
 Or clone the repository and build manually:
