@@ -1,21 +1,21 @@
 # RuleForge
 
-AIエージェントのルールを管理するためのCLIツール。ベースリポジトリとローカルリポジトリ間でAIエージェントのルールファイル（`.cursor/rules.md`など）を同期します。
+A CLI tool for managing AI agent rules. Synchronizes AI agent rule files (such as `.cursor/rules.md`) between a base repository and local repositories.
 
-## 概要
+## Overview
 
-このツールは以下の機能を提供します：
+This tool provides the following functions:
 
-1. **ダウンロード**: ベースリポジトリからCursor Rulesファイルをカレントディレクトリにコピー
-2. **アップロード**: カレントディレクトリのCursor RulesファイルをベースリポジトリにPRとして送信
+1. **Download**: Copy rule files from the base repository to the current directory
+2. **Upload**: Send rule files from the current directory to the base repository as a PR
 
-## インストール
+## Installation
 
 ```bash
 go install github.com/yourusername/ruleforge@latest
 ```
 
-または、リポジトリをクローンして手動でビルド：
+Or clone the repository and build manually:
 
 ```bash
 git clone https://github.com/yourusername/ruleforge.git
@@ -23,76 +23,76 @@ cd ruleforge
 go build
 ```
 
-## 使い方
+## Usage
 
-### 基本コマンド
+### Basic Commands
 
 ```bash
-# ヘルプを表示
+# Display help
 ruleforge --help
 
-# ベースリポジトリからルールをダウンロード
+# Download rules from the base repository
 ruleforge download --base-repo https://github.com/organization/base-rules-repo
 
-# カレントディレクトリのルールをベースリポジトリにアップロードしてPRを作成
+# Upload rules from the current directory to the base repository as a PR
 ruleforge upload --base-repo https://github.com/organization/base-rules-repo --message "Update rules for my-project"
 ```
 
-### 設定ファイル
+### Configuration File
 
-`.ruleforge.yaml`という設定ファイルを作成することで、コマンドライン引数を省略できます：
+Create a `.ruleforge.yaml` configuration file to omit command line arguments:
 
 ```yaml
 base-repo: https://github.com/organization/base-rules-repo
 target-files:
   - .cursor/rules.md
   - .cursor/config.json
-github-token: ${GITHUB_TOKEN} # 環境変数から読み込み
+github-token: ${GITHUB_TOKEN} # Load from environment variable
 ```
 
-## アーキテクチャ
+## Architecture
 
 ```
-cmd/             # エントリーポイントとCLIコマンド定義
+cmd/             # Entry points and CLI command definitions
   ruleforge/
     main.go
-internal/        # 内部パッケージ
-  config/        # 設定ファイル関連
-  download/      # ダウンロード機能
-  upload/        # アップロード機能
-  github/        # GitHub API操作
-  file/          # ファイル操作ユーティリティ
-  logger/        # ロギング
-pkg/             # 公開APIパッケージ（必要な場合）
+internal/        # Internal packages
+  config/        # Configuration file related
+  download/      # Download functionality
+  upload/        # Upload functionality
+  github/        # GitHub API operations
+  file/          # File operation utilities
+  logger/        # Logging
+pkg/             # Public API packages (if needed)
 ```
 
-## 開発
+## Development
 
-### 必要条件
+### Requirements
 
-- Go 1.20以上
-- GitHub Personal Access Token（アップロード機能で使用）
+- Go 1.20 or higher
+- GitHub Personal Access Token (used for upload functionality)
 
-### テスト
+### Testing
 
 ```bash
 go test ./...
 ```
 
-### ビルド
+### Building
 
 ```bash
 go build -o ruleforge ./cmd/ruleforge
 ```
 
-## ライセンス
+## License
 
 MIT
 
-## 貢献
+## Contributing
 
-1. このリポジトリをフォーク
-2. 機能ブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
-4. ブランチをプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
