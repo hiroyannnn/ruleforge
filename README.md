@@ -8,6 +8,7 @@ This tool provides the following functions:
 
 1. **Download**: Copy rule files from the base repository to the current directory
 2. **Upload**: Send rule files from the current directory to the base repository as a PR
+3. **Update Notification**: Automatically checks for new versions and notifies when updates are available
 
 ## Installation
 
@@ -72,18 +73,61 @@ pkg/             # Public API packages (if needed)
 
 - Go 1.20 or higher
 - GitHub Personal Access Token (used for upload functionality)
+- GoReleaser (for creating releases)
 
 ### Testing
 
 ```bash
-go test ./...
+make test
 ```
 
 ### Building
 
 ```bash
-go build -o ruleforge ./cmd/ruleforge
+make build
 ```
+
+### Releasing a New Version
+
+To create a new release:
+
+1. Make sure all your changes are committed and pushed
+2. Run the release command with the new version:
+
+```bash
+make release VERSION=v1.2.3
+```
+
+This will:
+
+- Create a git tag for the specified version
+- Push the tag to GitHub
+- GitHub Actions will automatically:
+  - Build binaries for different platforms (Linux, macOS, Windows)
+  - Create a GitHub Release
+  - Upload the binaries to the GitHub release
+
+The release workflow is defined in `.github/workflows/release.yml` and is triggered automatically when a tag with the format `v*` is pushed.
+
+To test the release process without actually publishing:
+
+```bash
+make release-dry-run
+```
+
+## Available Make Commands
+
+The project includes a Makefile with the following commands:
+
+- `make build` - Build the binary
+- `make test` - Run tests
+- `make lint` - Run linter
+- `make vet` - Run Go vet
+- `make format` - Format code
+- `make clean` - Clean build artifacts
+- `make release` - Create a new release
+- `make release-dry-run` - Test the release process
+- `make install` - Install locally
 
 ## License
 
