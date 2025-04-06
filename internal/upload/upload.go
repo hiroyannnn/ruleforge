@@ -104,10 +104,8 @@ func Execute(cfg *config.Config) error {
 		// ファイルのアップロード先パス
 		targetPath := filePath
 		if cfg.RepoName != "" {
-			// リポジトリ固有のディレクトリにファイルを配置
-			dir := filepath.Dir(filePath)
-			base := filepath.Base(filePath)
-			targetPath = filepath.Join(dir, cfg.RepoName, base)
+			// リポジトリ名をルートディレクトリとして配置
+			targetPath = filepath.Join(cfg.RepoName, filePath)
 		}
 
 		// ファイルをアップロード（更新または作成）

@@ -32,16 +32,36 @@ func Execute(cfg *config.Config) error {
 			log.Printf("ファイル '%s' をダウンロード中...", filePath)
 		}
 
+		// 汎用パスでまずダウンロードを試みる
+		downloadPath := filePath
+
 		// GitHubからファイルコンテンツを取得
 		content, _, _, err := client.Repositories.GetContents(
 			ctx,
 			owner,
 			repo,
-			filePath,
+			downloadPath,
 			&github.RepositoryContentGetOptions{},
 		)
-		if err != nil {
-			return fmt.Errorf("ファイル '%s' の取得に失敗: %w", filePath, err)
+		if err != nil && cfg.RepoName != "" {
+			// 汎用パスでエラーが発生した場合、リポジトリ固有のパスでリトライ
+			repoSpecificPath := filepath.Join(cfg.RepoName, filePath)
+			if cfg.Verbose {
+				log.Printf("汎用パスでファイルが見つかりません。リポジトリ固有のパス '%s' でリトライします", repoSpecificPath)
+			}
+			content, _, _, err = client.Repositories.GetContents(
+				ctx,
+				owner,
+				repo,
+				repoSpecificPath,
+				&github.RepositoryContentGetOptions{},
+			)
+			if err != nil {
+				return fmt.Errorf("ファイル '%s' および '%s' の取得に失敗: %w", filePath, repoSpecificPath, err)
+			}
+			downloadPath = repoSpecificPath
+		} else if err != nil {
+			return fmt.Errorf("ファイル '%s' の取得に失敗: %w", downloadPath, err)
 		}
 
 		// ファイルコンテンツをデコード
@@ -63,7 +83,7 @@ func Execute(cfg *config.Config) error {
 			return fmt.Errorf("ファイル '%s' の書き込みに失敗: %w", localFilePath, err)
 		}
 
-		log.Printf("ファイル '%s' をダウンロードしました: %s", filePath, localFilePath)
+		log.Printf("ファイル '%s' をダウンロードしました: %s", downloadPath, localFilePath)
 	}
 
 	log.Println("すべてのファイルのダウンロードが完了しました")
