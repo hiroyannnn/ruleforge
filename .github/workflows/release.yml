@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write  # リリース作成とリリースアセットのアップロードに必要
+
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
