@@ -7,6 +7,7 @@ import (
 
 	"github.com/hiroyannnn/ruleforge/internal/config"
 	"github.com/hiroyannnn/ruleforge/internal/download"
+	"github.com/hiroyannnn/ruleforge/internal/updategeneral"
 	"github.com/hiroyannnn/ruleforge/internal/upload"
 	"github.com/hiroyannnn/ruleforge/internal/version"
 	"github.com/spf13/cobra"
@@ -63,6 +64,24 @@ func main() {
 		},
 	}
 
+	// update-generalコマンド
+	updateGeneralCmd := &cobra.Command{
+		Use:   "update-general",
+		Short: "カレントリポジトリのエージェントルールをベースリポジトリのgeneralディレクトリに更新",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cfg, err := loadConfig()
+			if err != nil {
+				return err
+			}
+
+			return updategeneral.Execute(cfg)
+		},
+	}
+	updateGeneralCmd.Flags().StringVarP(&message, "message", "m", "", "PRのメッセージ")
+	if err := updateGeneralCmd.MarkFlagRequired("message"); err != nil {
+		log.Fatalf("Error marking flag as required: %v", err)
+	}
+
 	// uploadコマンド
 	uploadCmd := &cobra.Command{
 		Use:   "upload",
@@ -93,6 +112,7 @@ func main() {
 
 	// コマンド追加
 	rootCmd.AddCommand(downloadCmd)
+	rootCmd.AddCommand(updateGeneralCmd)
 	rootCmd.AddCommand(uploadCmd)
 	rootCmd.AddCommand(initCmd)
 

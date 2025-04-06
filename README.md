@@ -8,8 +8,9 @@ This tool provides the following functions:
 
 1. **Download**: Copy rule files from the base repository to the current directory
 2. **Upload**: Send rule files from the current directory to the base repository as a PR
-3. **Update Notification**: Automatically checks for new versions and notifies when updates are available
-4. **Init**: Generate a configuration file in the current directory
+3. **Update General**: Update rule files in the general directory of the base repository
+4. **Update Notification**: Automatically checks for new versions and notifies when updates are available
+5. **Init**: Generate a configuration file in the current directory
 
 ## Installation
 
@@ -41,6 +42,9 @@ ruleforge download --base-repo https://github.com/organization/base-rules-repo
 
 # Upload rules from the current directory to the base repository as a PR
 ruleforge upload --base-repo https://github.com/organization/base-rules-repo --message "Update rules for my-project"
+
+# Update general rules in the base repository
+ruleforge update-general --base-repo https://github.com/organization/base-rules-repo --message "Update general rules"
 ```
 
 ### Configuration File
