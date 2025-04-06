@@ -13,13 +13,13 @@ This tool provides the following functions:
 ## Installation
 
 ```bash
-go install github.com/yourusername/ruleforge@latest
+go install github.com/hiroyannnn/ruleforge@latest
 ```
 
 Or clone the repository and build manually:
 
 ```bash
-git clone https://github.com/yourusername/ruleforge.git
+git clone https://github.com/hiroyannnn/ruleforge.git
 cd ruleforge
 go build
 ```
