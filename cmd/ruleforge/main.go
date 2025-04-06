@@ -8,14 +8,15 @@ import (
 	"github.com/hiroyannnn/ruleforge/internal/config"
 	"github.com/hiroyannnn/ruleforge/internal/download"
 	"github.com/hiroyannnn/ruleforge/internal/upload"
+	"github.com/hiroyannnn/ruleforge/internal/version"
 	"github.com/spf13/cobra"
 )
 
 var (
 	// バージョン情報（ビルド時に設定）
-	version = "dev"
-	commit  = "none"
-	date    = "unknown"
+	buildVersion = "dev"
+	buildCommit  = "none"
+	buildDate    = "unknown"
 )
 
 var (
@@ -26,12 +27,19 @@ var (
 	verbose    bool
 )
 
+func init() {
+	// バージョン情報をバージョンパッケージに設定
+	version.CurrentVersion = buildVersion
+	version.CurrentCommit = buildCommit
+	version.CurrentDate = buildDate
+}
+
 func main() {
 	// ルートコマンド
 	rootCmd := &cobra.Command{
 		Use:     "ruleforge",
 		Short:   "AIエージェントのルール管理ツール",
-		Version: fmt.Sprintf("%s (commit: %s, built at: %s)", version, commit, date),
+		Version: fmt.Sprintf("%s (commit: %s, built at: %s)", version.CurrentVersion, version.CurrentCommit, version.CurrentDate),
 	}
 
 	// フラグ定義
@@ -75,6 +83,19 @@ func main() {
 	// コマンド追加
 	rootCmd.AddCommand(downloadCmd)
 	rootCmd.AddCommand(uploadCmd)
+
+	// バージョンチェックを実行
+	go func() {
+		updateMsg, err := version.CheckForUpdates()
+		if err != nil {
+			// エラーは無視（ログに残さない）
+			return
+		}
+		if updateMsg != "" {
+			// 更新通知を表示
+			fmt.Fprintln(os.Stderr, updateMsg)
+		}
+	}()
 
 	// コマンド実行
 	if err := rootCmd.Execute(); err != nil {
