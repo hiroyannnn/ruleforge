@@ -25,6 +25,7 @@ var (
 	files      []string
 	message    string
 	verbose    bool
+	outputFile string
 )
 
 func init() {
@@ -80,9 +81,20 @@ func main() {
 		log.Fatalf("Error marking flag as required: %v", err)
 	}
 
+	// initコマンド
+	initCmd := &cobra.Command{
+		Use:   "init",
+		Short: "設定ファイルをカレントディレクトリに生成",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return config.GenerateConfigFile(outputFile, baseRepo, files)
+		},
+	}
+	initCmd.Flags().StringVarP(&outputFile, "output", "o", ".ruleforge.yaml", "出力する設定ファイルのパス")
+
 	// コマンド追加
 	rootCmd.AddCommand(downloadCmd)
 	rootCmd.AddCommand(uploadCmd)
+	rootCmd.AddCommand(initCmd)
 
 	// バージョンチェックを実行
 	go func() {

@@ -9,6 +9,7 @@ This tool provides the following functions:
 1. **Download**: Copy rule files from the base repository to the current directory
 2. **Upload**: Send rule files from the current directory to the base repository as a PR
 3. **Update Notification**: Automatically checks for new versions and notifies when updates are available
+4. **Init**: Generate a configuration file in the current directory
 
 ## Installation
 
@@ -32,6 +33,9 @@ go build
 # Display help
 ruleforge --help
 
+# Generate a configuration file in the current directory
+ruleforge init --base-repo https://github.com/organization/base-rules-repo
+
 # Download rules from the base repository
 ruleforge download --base-repo https://github.com/organization/base-rules-repo
 
@@ -49,6 +53,19 @@ target-files:
   - .cursor/rules.md
   - .cursor/config.json
 github-token: ${GITHUB_TOKEN} # Load from environment variable
+```
+
+You can generate this file automatically using the `init` command:
+
+```bash
+# Generate a config file with default settings
+ruleforge init
+
+# Specify a base repository
+ruleforge init --base-repo https://github.com/organization/base-rules-repo
+
+# Specify the output file location
+ruleforge init --output my-config.yaml
 ```
 
 ## Architecture

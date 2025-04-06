@@ -83,6 +83,52 @@ func Load(configFile string) (*Config, error) {
 	return cfg, nil
 }
 
+// GenerateConfigFile は設定ファイルテンプレートをカレントディレクトリに生成する
+func GenerateConfigFile(outputFile string, baseRepo string, files []string) error {
+	// ファイルが既に存在する場合は確認
+	if _, err := os.Stat(outputFile); err == nil {
+		return fmt.Errorf("設定ファイル %s は既に存在します。上書きするには先に削除してください", outputFile)
+	}
+
+	// デフォルト設定
+	cfg := &Config{
+		BaseRepo:    baseRepo,
+		Files:       files,
+		GitHubToken: "${GITHUB_TOKEN}",
+		Message:     "Update Cursor Rules",
+		LocalDir:    ".",
+		BranchName:  "update-agent-rules",
+		Verbose:     false,
+	}
+
+	// リポジトリ名の自動検出を試みる
+	repoName, err := detectRepoName()
+	if err == nil {
+		cfg.RepoName = repoName
+	}
+
+	// 設定ファイルにコメントを追加するため、マーシャルした結果を文字列として取得
+	yamlData, err := yaml.Marshal(cfg)
+	if err != nil {
+		return fmt.Errorf("設定ファイルの生成に失敗: %w", err)
+	}
+
+	// ヘッダーコメントを追加
+	configContent := `# RuleForge 設定ファイル
+# このファイルは自動生成されました
+
+`
+	configContent += string(yamlData)
+
+	// ファイルに書き込み
+	if err := os.WriteFile(outputFile, []byte(configContent), 0644); err != nil {
+		return fmt.Errorf("設定ファイルの書き込みに失敗: %w", err)
+	}
+
+	fmt.Printf("設定ファイル %s を生成しました\n", outputFile)
+	return nil
+}
+
 // detectRepoName はカレントディレクトリのGitリポジトリからリポジトリ名を検出
 func detectRepoName() (string, error) {
 	// .git/config ファイルのパスを作成
