@@ -92,7 +92,7 @@ pkg/             # Public API packages (if needed)
 
 ### Requirements
 
-- Go 1.20 or higher
+- Go 1.23 or higher (the repository selects Go 1.24.2 by default)
 - GitHub Personal Access Token (used for upload functionality)
 - GoReleaser (for creating releases)
 
